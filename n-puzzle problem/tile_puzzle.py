@@ -86,7 +86,7 @@ class TilePuzzle:
         if not is_target_state_found:
             print("Target state not found")
         else:
-            print(count, 'time taken:--', end-start)
+            print(count, 'time taken:--', end-start, ' seconds')
             self.write_to_Nodestxt_file(visited_states_set)
             self.write_to_NodesInfotxt_file(child_parent_map, solution_state['index'])
             self.write_to_nodePathtxt_file(solution_state)
