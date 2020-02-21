@@ -14,11 +14,13 @@
 - Type: **$ python solve_tile_puzzle.py**
 - Input should be a row-wise 1-D vector: eg: 
    if the matrix is:
+   
    1 2 3
    
    4 0 5 
    
    6 7 8
+   
    then input = '1 2 3 4 0 5 6 7 8'.
 - All the numbers should be white-space separated in one single line.
 - Numbers should be non-repeating and should be in the range of 0 to N
