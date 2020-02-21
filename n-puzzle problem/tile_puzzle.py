@@ -58,10 +58,9 @@ class TilePuzzle:
         print("\nPlease wait while the solver finds a solution for you...\n")
         start = time.clock()
         while not (state_queue.empty() or is_target_state_found):
-            if (not msg_queue.empty()) and (count % 60000 == 0):
-                print(msg_queue.get())
-
             count +=  1
+            if (not msg_queue.empty()) and (count % 150000 == 0):
+                print(msg_queue.get())
             
             current_state = state_queue.get()
             visited_states_set.add(current_state['pattern'])
@@ -86,7 +85,7 @@ class TilePuzzle:
         if not is_target_state_found:
             print("Target state not found")
         else:
-            print(count, 'time taken:--', end-start, ' seconds')
+            print(count, '=> Time taken:', end-start, 'seconds')
             self.write_to_Nodestxt_file(visited_states_set)
             self.write_to_NodesInfotxt_file(child_parent_map, solution_state['index'])
             self.write_to_nodePathtxt_file(solution_state)
