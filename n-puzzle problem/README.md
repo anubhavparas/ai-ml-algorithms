@@ -16,7 +16,7 @@
 - All the numbers should be white-space separated in one single line.
 - Numbers should be non-repeating and should be in the range of 0 to N.
 
-   For example, if the matrix is:
+   For example, if the initial state is:
    
    1 2 3
    
