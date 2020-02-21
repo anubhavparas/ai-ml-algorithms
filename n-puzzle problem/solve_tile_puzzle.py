@@ -2,7 +2,7 @@ import numpy as np
 from tile_puzzle import TilePuzzle
 
 if __name__ == "__main__":
-    print("\n\n>> Enter the initial state of the tile puzzle:")
+    print("\n\n>> Enter the initial state of the tile puzzle. It can be 8-puzzle or 15-puzzle or more (if you can wait long for the solution)")
     print(">> If your initial state is:")
     print('-------------')
     print('| 1 | 2 | 3 |')

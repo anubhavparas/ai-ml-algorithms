@@ -18,10 +18,10 @@ import time
 
 class TilePuzzle:
 
-    def __init__(self, init_state, target_state = (1,2,3,4,5,6,7,8,0)):
+    def __init__(self, init_state):
         self.init_state = init_state
-        self.target_state = target_state
         self.total_numbers = len(init_state)
+        self.target_state = self.get_target_state()
         self.matrix_dim = int(np.sqrt(self.total_numbers))
     
     #########################################################################
@@ -212,6 +212,11 @@ class TilePuzzle:
             for j in range(0, self.matrix_dim):
                 state_str += " " + str(state[i + j*self.matrix_dim]) 
         return state_str + '\n'
+
+    def get_target_state(self):
+        target_numbers_list = [num for num in range(1, self.total_numbers)]
+        target_numbers_list.append(0)
+        return tuple(target_numbers_list)
 
     
     def init_msg_queue(self, msg_queue):
