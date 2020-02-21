@@ -12,8 +12,11 @@
 - In the terminal where you can run python scripts go to the directory where the above files are located
 - Make sure you have numpy installed. *[help](https://docs.scipy.org/doc/numpy/user/install.html)*
 - Type: **$ python solve_tile_puzzle.py**
-- Input should be a row-wise 1-D vector: eg: 
-   if the matrix is:
+- Input should be a row-wise 1-D vector.
+- All the numbers should be white-space separated in one single line.
+- Numbers should be non-repeating and should be in the range of 0 to N.
+
+   For example, if the matrix is:
    
    1 2 3
    
@@ -22,5 +25,5 @@
    6 7 8
    
    then input = '1 2 3 4 0 5 6 7 8'.
-- All the numbers should be white-space separated in one single line.
-- Numbers should be non-repeating and should be in the range of 0 to N
+   
+
