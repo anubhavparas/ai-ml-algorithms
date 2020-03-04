@@ -121,7 +121,7 @@ class PathExplorer:
                     'UL': [-1, -1], 'UR': [-1, 1], 'DL': [1, -1], 'DR': [1, 1]}
 
             initial_pos = list(initial_pos)
-            print('Visualization in process...\nPress any key to stop.')
+            print('Visualization in process...\nPress Esc key to stop.')
             for node in visited_nodes:
                 cspace_map[node] = WHITE
                 cv2.imshow('Environment Map', cspace_map)
@@ -134,7 +134,7 @@ class PathExplorer:
                 cspace_map[tuple(next_pos)] = GREEN
             
             cv2.imshow('Environment Map', cspace_map)
-            print('\nVisualization Complete. Press any key to exit.')
+            print('\nVisualization Complete. Press Esc key to exit.')
         except:
             print("Something went wrong in visualization.")
 
