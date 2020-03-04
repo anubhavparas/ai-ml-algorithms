@@ -15,7 +15,7 @@ class PathExplorer:
         target_pos = (matrix_dim_row-1 - target_pos[0], target_pos[1])
         
         if (not self.is_position_valid(initial_pos, cspace_map)) or (not self.is_position_valid(target_pos, cspace_map)):
-            print("The initial or target positions lie in the obstacle space or out of the configuration space. Please check and try again.")
+            print("Either initial or target position lies in the obstacle space or out of the configuration space. Please check and try again.")
             return
 
         cost_matrix = np.zeros((matrix_dim_row, matrix_dim_col), dtype=object)
@@ -46,7 +46,7 @@ class PathExplorer:
             
             current_node = node_queue.get()[1]
             if current_node['pos'] == target_pos:
-                print('\n\nTarget found')
+                print('\nTarget found')
                 is_target_found = True
                 solution_path, path_cost = current_node['path'], current_node['cost'] 
             else:
