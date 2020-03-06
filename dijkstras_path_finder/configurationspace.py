@@ -29,7 +29,3 @@ class ConfigurationSpace:
 
         print('Configuration space initialized.\n')
         return img
-
-
-
-    
