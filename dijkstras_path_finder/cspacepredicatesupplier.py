@@ -15,6 +15,8 @@ import cv2
 
     >> Equation used for ellipse: ((x-x1)^2)/a^2 + ((y-y1)^2)/b^2 - 1 = 0,
         where (x1,y1) are the co-ordinates of the centre and a,b are the lengths of the axes of the ellipse
+ 
+ The obstacle space is padded for rigid robot. The padding is equal to the sum of radius of the robot and the clearance required by the robot. In case of a point robot, the padding is zero
 '''
 
 class CSpacePredicateSupplier:
@@ -41,7 +43,8 @@ class CSpacePredicateSupplier:
         predicate_poly_lines = lambda x,y: pred_poly_line_1(x,y) and pred_poly_line_2(x,y) and pred_poly_line_3(x,y) and (pred_poly_line_4(x,y) or pred_poly_line_5(x,y)) and pred_poly_line_6(x,y)
         return predicate_poly_lines
 
-    
+    #The rectangle predicate is found by calculating the coordinates of the rectangle from the dimensions and slope of the figure given in configuration space specifications (check here -> /media/cspace_spec.PNG)
+
     def get_rect_predicate(self, height, padding):
         X, Y = 0, 1
         coord_rect = np.array([(30-padding, height-(67.5+padding)),
