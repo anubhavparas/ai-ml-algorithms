@@ -8,8 +8,7 @@ from simplepriorityqueue import SimplePriorityQueue
 
 class PathExplorer:
     
-    def find_path(self, initial_pos, target_pos, cspace_map):
-
+    def find_path(self, initial_pos, target_pos, cspace_map, heuristic_func):
         matrix_dim_row, matrix_dim_col = cspace_map.shape[0], cspace_map.shape[1]
         initial_pos = (matrix_dim_row-1 - initial_pos[0], initial_pos[1])
         target_pos = (matrix_dim_row-1 - target_pos[0], target_pos[1])
@@ -52,14 +51,14 @@ class PathExplorer:
             else:
                 visited_nodes_list.append(current_node['pos'])
                 visited_nodes_set.add(current_node['pos'])
-                next_positions = self.get_next_positions(current_node, cspace_map)
+                next_positions = self.get_next_positions(current_node, cspace_map, target_pos, heuristic_func)
                 for node in next_positions:
                     if node['pos'] not in visited_nodes_set:
-                        old_cost_to_reach_node = math.inf if cost_matrix[node['pos']] == math.inf else cost_matrix[node['pos']]['cost'] 
-                        new_cost_to_reach_node = node['cost']
-                        if old_cost_to_reach_node > new_cost_to_reach_node:
+                        old_cost_for_node = math.inf if cost_matrix[node['pos']] == math.inf else cost_matrix[node['pos']]['cost'] 
+                        new_cost_for_node = node['cost'] + node['cost_to_go']
+                        if old_cost_for_node > new_cost_for_node:
                             cost_matrix[node['pos']] = node
-                            node_queue.put(node['cost'], node)
+                            node_queue.put(new_cost_for_node, node)
 
         end = time.clock()
 
@@ -73,7 +72,7 @@ class PathExplorer:
 
         
         
-    def get_next_positions(self, node, cspace_map):
+    def get_next_positions(self, node, cspace_map, target_pos, heuristic_func):
         ## add the cache logic
         
         ## for a 2D matrix (0,0) is there at the top left corner
@@ -97,7 +96,8 @@ class PathExplorer:
                 next_postions.append({
                     'pos': tuple(next_pos),
                     'path': node_path,
-                    'cost': node['cost'] + action_cost_map[action]
+                    'cost': node['cost'] + action_cost_map[action],
+                    'cost_to_go': heuristic_func(next_pos, target_pos)
                 })
         return next_postions
                 
