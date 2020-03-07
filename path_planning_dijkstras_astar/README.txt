@@ -29,17 +29,17 @@ It is to be noted that the input sequence must be taken in order of numeric inde
 For example., for Initial Position: 0 0; Target position: 199 199 and so on. 
 
 For point robot, following test cases may be checked,
-Initial position : i). 0 0 / ii). 1 1 / iii). 2 5 / iv). 4 4 / v). 199 199 / vi). 5 5 
-Target position : i).199 199 / ii). 100 100 / iii). 120 120 / iv). 150 150 / v). 0 0 / vi). 295 195
+Initial position : i). 0 0 | ii). 1 1 | iii). 2 5 | iv). 4 4 | v). 199 199 | vi). 5 5 
+Target position : i).199 199 | ii). 100 100 | iii). 120 120 | iv). 150 150 | v). 0 0 | vi). 295 195
 
 Similarly, input sequence order for rigid robot must be maintained as described in previous case.
 For example., for Initial position: 16 16; Target position: 140 178, Robot Radius: 5, Clearance Required: 6 and so on.
 
 For rigid robot, following test cases may be checked,
-Initial position: i). 16 16 / ii). 6 6 / iii). 3 3 / iv). 5 5
-Target position : i). 140 178 / ii). 150 150 / iii). 140 160 / iv). 295 195
-Robot Radius : i). 5 / ii). 2 / iii). 1 / iv). 1
-Clearance Required : i). 6 / ii). 3 / iii). 1 / iv). 1
+Initial position: i). 16 16 | ii). 6 6 | iii). 3 3 | iv). 5 5
+Target position : i). 140 178 | ii). 150 150 | iii). 140 160 | iv). 295 195
+Robot Radius : i). 5 | ii). 2 | iii). 1 | iv). 1
+Clearance Required : i). 6 | ii). 3 | iii). 1 | iv). 1
 
 ##### Sample input-output case scenarios:
 - For Point Robot:
