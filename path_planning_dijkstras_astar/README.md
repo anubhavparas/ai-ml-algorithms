@@ -26,12 +26,15 @@
 
 ##### The configuration space is given as follows:
 Defining the configuration space
+
 ![alt text](./media/cspace_spec.PNG?raw=true "Configuration Space Specifications")
 
 Configuration space for point robot, when radius and clearance is (0,0)
+
 ![alt text](./media/cspace_point.PNG?raw=true "Configuration Space for Point Robot")
 
-Configuration space for rigid robot, with some non-zero radius and clearance defined by the user 
+Configuration space for rigid robot, with some non-zero radius and clearance defined by the user
+
 ![alt text](./media/cspace_rigid.PNG?raw=true "Configuration Space for Rigid Robot")
 
 ##### Sample input test cases:
@@ -53,23 +56,26 @@ Clearance Required : i). 6 / ii). 3 / iii). 1 / iv). 1
 
 ##### Sample input-output case scenarios:
 - For Point Robot:
-INPUT:
-Initial position: 5 5
-Target position: 295 195
 
-OUTPUT:
-Time taken: 31.0661988 sec
-Cost of the path: 375.7300141024123 units
+  **Input:**
+  - Initial position: 5 5
+  - Target position: 295 195
+
+  **Output:**
+  - Time taken: 31.0661988 sec
+  - Cost of the path: 375.7300141024123 units
+
 
 - For Rigid robot:
-INPUT:
-Initial position: 5 5
-Target position: 295 195
-Robot Radius: 1
-Clearance Required: 1
 
-OUTPUT:
-Time take: 29.05278529999996 sec
-Cost of the path: 377.487373415293 units
+  **Input:**
+  - Initial position: 5 5
+  - Target position: 295 195
+  - Robot Radius: 1
+  - Clearance Required: 1
+
+  **Output:**
+  - Time take: 29.05278529999996 sec
+  - Cost of the path: 377.487373415293 units
 
 
