@@ -20,12 +20,12 @@ def checkCircleIntersection(p1,p2,r,center):
     if m == np.inf:
         A = 1
         B = -2*q
-        C = q**2 + x_int**2 + p**2 - r**2 - 2*a*p
+        C = q**2 + x_int**2 + p**2 - r**2 - 2*x_int*p
         flag  = 1
     else:
         A = 1+m**2
-        B = 2*(m*c - m*q - p)
-        C = q**2 - r**2 + p**2 -2*y_int*q + c**2
+        B = 2*(m*y_int - m*q - p)
+        C = q**2 - r**2 + p**2 -2*y_int*q + y_int**2
         flag = 0
         
     disc = B**2 - 4*A*C
