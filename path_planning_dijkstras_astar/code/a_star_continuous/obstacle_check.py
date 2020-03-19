@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[95]:
-
-
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,52 +13,75 @@ Checking if the line intersects closed figure
 # @Params: Segment pt1, pt2,radius,center
 # Return type: bool
 def checkCircleIntersection(p1,p2,r,center):
-    m,c = lineModelGenerator(p1,p2)
+    m,y_int,x_int = lineModelGenerator(p1,p2)
     q = center[1]
     p = center[0]
     
-    A = 1+m**2
-    B = 2*(m*c - m*q - p)
-    C = q**2 - r**2 + p**2 -2*c*q + c**2
-    
+    if m == np.inf:
+        A = 1
+        B = -2*q
+        C = q**2 + x_int**2 + p**2 - r**2 - 2*a*p
+        flag  = 1
+    else:
+        A = 1+m**2
+        B = 2*(m*c - m*q - p)
+        C = q**2 - r**2 + p**2 -2*y_int*q + c**2
+        flag = 0
+        
     disc = B**2 - 4*A*C
    
     if disc < 0:
         return False
     else:
-        x1 = (-B+math.sqrt(disc))/(2*A)
-        x2 = (-B-math.sqrt(disc))/(2*A)
+        if flag == 0:
+            x1 = (-B+math.sqrt(disc))/(2*A)
+            x2 = (-B-math.sqrt(disc))/(2*A)
+        elif flag == 1:
+            x1 = x_int
+            x2 = x1
 
-        if p1[0]<=x1<=p2[0] or p1[0]<=x2<=p2[0]:
-            return True
-        else:
-            return False
+    if min(p1[0],p2[0])<=x1<=max(p1[0],p2[0]) or min(p1[0],p2[0])<=x2<=max(p1[0],p2[0]):
+        return True
+    else:
+        return False
         
 # Ellipse: 
 # @Params: Segment pt1, pt2, ellipse params,center
 # Return type: bool
 def checkEllipseIntersection(p1,p2,ell_param,center):
-    m,c = lineModelGenerator(p1,p2)
+    m,y_int,x_int = lineModelGenerator(p1,p2)
     
+    h = center[0]
+    k = center[1]
     a = ell_param[0]
     b = ell_param[1]
-
-    A = (a**2)*(m**2) + b**2
-    B = 2*(a**2)*m*c
-    C = (a**2)*((c**2)-(b**2))
+    if m == np.inf:
+        A = 1
+        B = -2*k
+        C = k**2 - b**2 + ((x_int-h)**2)*((b**2)/(a**2))
+        flag = 1
+    else:    
+        A = (a**2)*(m**2) + b**2
+        B = 2*(-((h**2)*(b**2))+(a**2)*m*(y_int-k))
+        C = (h**2)*(b**2) + (a**2)*((y_int-k)**2) - (a**2)*(b**2)
+        flag = 0
     
     #Checking if the quadratic equation has unique real roots
     disc = B**2 - 4*A*C
     if disc < 0:
         return False
     else:
-        x1 = (-B+math.sqrt(disc))/(2*A)
-        x2 = (-B-math.sqrt(disc))/(2*A)
+        if flag == 0:
+            x1 = (-B+math.sqrt(disc))/(2*A)
+            x2 = (-B-math.sqrt(disc))/(2*A)
+        elif flag == 1:
+            x1 = x_int
+            x2 = x1
 
-        if p1[0]<=x1<=p2[0] or p1[0]<=x2<=p2[0]:
-            return True
-        else:
-            return False
+    if min(p1[0],p2[0])<=x1<=max(p1[0],p2[0]) or min(p1[0],p2[0])<=x2<=max(p1[0],p2[0]):
+        return True
+    else:
+        return False
 
 # Polygon: 
 # @Params: Segment pt1, pt2, coordinates of polygon
@@ -72,64 +89,69 @@ def checkEllipseIntersection(p1,p2,ell_param,center):
 def checkPolyIntersection(p1,p2,coord):
     x = coord[:,0]
     y = coord[:,1]
-    
+    flag = 0
     polyLines_model = [] 
-    M,C = lineModelGenerator(p1,p2)
+    M,Y_int,X_int = lineModelGenerator(p1,p2)
+    
     for i in range(len(coord)):
         if i+1 >= len(coord):
             polyLines_model.append(lineModelGenerator(coord[i],coord[0]))
         else:    
             polyLines_model.append(lineModelGenerator(coord[i],coord[i+1]))
-        
+    
     print(polyLines_model)
     for model in polyLines_model:
-        num = model[1] - C
-        if model[0] == np.inf:
-            x = model[1]
+        m_poly = model[0]
+        y_int_poly = model[1]
+        x_int_poly = model[2]
+        
+        if m_poly == np.inf:
+            x = x_int_poly
+#             m_poly = M
+#             y_int_poly = Y_int
         else:
-            den = M - model[0]
+            #if M!=np.inf:
+            num = y_int_poly - Y_int
+            den = M - m_poly
             x =  num/den
-        y = M*x+C
-        if p1[0]<x<=p2[0] and p1[1]<y<p2[1]:
-            return True
-        else:
-            return False
-
+#             else:
+#                 x = X_int 
+                
+        #y = m_poly*x + y_int_poly
+        y = M*x + Y_int
+        #print('(x,y)',(x,y))
+        if min(p1[0],p2[0])<x<=max(p1[0],p2[0]) and min(p1[1],p2[1])<y<=max(p1[1],p2[1]):
+            if boundaryCondition(coord,x,y) == True:
+                flag+=1
+    if flag > 0:
+        return True
+    else:
+        return False        
+    
 def lineModelGenerator(l1,l2):
     if l1[0] == l2[0]:
-        c = l2[0]
+        x_intercept = l2[0]
         m = np.inf
+        y_intercept = np.inf
     else:
         m = (l2[1]-l1[1])/(l2[0]-l1[0])
-        c = l2[1]-m*l2[0]
-    return m,c
+        y_intercept = l2[1]-m*l2[0]
+        x_intercept = 0
+    return m,y_intercept,x_intercept
 
-
-# In[94]:
-
-
-coord = np.array([(1,5),(5,5),(5,1),(1,1)],dtype = np.int32)
-print(coord[0])
-#result = checkPolyIntersection(line,coord)
-circ_r = 2
-circ_cent = (0,5)
-l1 = (0,5)
-l2 = (3,11)
-#r = checkCircleIntersection(l1,l2,circ_r,circ_cent)
-result = checkPolyIntersection(l1,l2,coord)
-#print(lineModelGenerator(l1,l2))
-#print(r)
-print(result)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
+def boundaryCondition(coord,x,y):
+    X_poly = coord[:,0]
+    Y_poly = coord[:,1]
+    flag = 0
+    for i in range(len(coord)):
+        if i+1 >= len(coord):
+            if min(X_poly[i],X_poly[0])<=x<=max(X_poly[i],X_poly[0]) and min(Y_poly[i],Y_poly[0])<=y<=max(Y_poly[i],Y_poly[0]):
+                flag+=1
+#             if x in range(min(X_poly[i],X_poly[0]),max(X_poly[i],X_poly[0])) and y in range(min(Y_poly[i],Y_poly[0]),max(Y_poly[i],Y_poly[0])):
+#                 flag+=1
+        else:
+            if min(X_poly[i],X_poly[i+1])<=x<=max(X_poly[i],X_poly[i+1]) and min(Y_poly[i],Y_poly[i+1])<=y<=max(Y_poly[i],Y_poly[i+1]):
+                flag+=1
+    if flag > 0:
+        return True
+    return False
