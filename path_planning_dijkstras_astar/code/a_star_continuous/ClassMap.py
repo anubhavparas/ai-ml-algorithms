@@ -58,33 +58,19 @@ class WorkspaceMap:
         fig.set_size_inches(8.5,6)
         ax = plt.axes(xlim=(0,width),ylim=(0,height))
         cir = plt.Circle((circle[1]),circle[0],fc=None)
+	borders = plt.Rectangle((0,0),width,height,alpha=1,fill=None,ec='b',linewidth=padding)
         rect = plt.Polygon(rect_pts)
         rhom = plt.Polygon(rhom_pts)
         poly = plt.Polygon(poly_pts)
         ell= Ellipse((ellipse[1]),ellipse[0][0],ellipse[0][1],0)
-        shapes = [cir,rect,rhom,poly,ell]
+        shapes = [cir,rect,rhom,poly,ell,borders]
         for shape in shapes:
             plt.gca().add_patch(shape)
         return fig
 
 
-# In[38]:
-
-
 Map = WorkspaceMap(5,5)
 fig = Map.plotMap()
-
-
-#plt.show()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
