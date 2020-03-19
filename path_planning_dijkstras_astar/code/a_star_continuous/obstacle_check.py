@@ -119,7 +119,7 @@ def checkPolyIntersection(p1,p2,coord):
                 
         #y = m_poly*x + y_int_poly
         y = M*x + Y_int
-        if min(p1[0],p2[0])<x<=max(p1[0],p2[0]) and min(p1[1],p2[1])<y<=max(p1[1],p2[1]):
+        if min(p1[0],p2[0])<=x<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=y<=max(p1[1],p2[1]):
             if ix+1 >= len(coord):
                 if min(x_poly_coord[ix],x_poly_coord[0])<=x<=max(x_poly_coord[ix],x_poly_coord[0]) and min(y_poly_coord[ix],y_poly_coord[0])<=y<=max(y_poly_coord[ix],y_poly_coord[0]):
                     flag+=1
