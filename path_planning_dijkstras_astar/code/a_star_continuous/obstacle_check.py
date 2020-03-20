@@ -99,7 +99,7 @@ def checkPolyIntersection(p1,p2,coord):
         else:    
             polyLines_model.append(lineModelGenerator(coord[i],coord[i+1]))
     
-    print(polyLines_model)
+    #print(polyLines_model)
     for ix,model in enumerate(polyLines_model):
         m_poly = model[0]
         y_int_poly = model[1]
@@ -113,7 +113,11 @@ def checkPolyIntersection(p1,p2,coord):
             #if M!=np.inf:
             num = y_int_poly - Y_int
             den = M - m_poly
-            x =  num/den
+            #print(num, M, m_poly, y_int_poly, Y_int)
+            if den == 0:
+                x = np.inf
+            else:
+                x =  num/den
 #             else:
 #                 x = X_int 
                 
@@ -132,7 +136,10 @@ def checkPolyIntersection(p1,p2,coord):
         return True
     else:
         return False        
-    
+
+def check_for_boundary_padding(x, y, width, height, padding):
+    return (x < padding) or (y < padding) or ((width-1 - x) < padding) or ((height-1 - y) < padding)
+
 def lineModelGenerator(l1,l2):
     if l1[0] == l2[0]:
         x_intercept = l2[0]

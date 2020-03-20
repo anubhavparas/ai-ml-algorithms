@@ -7,18 +7,20 @@ import matplotlib.pyplot as plt
 from simplepriorityqueue import SimplePriorityQueue
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from ClassMap import WorkspaceMap
 
 
 class PathExplorer:
     
     # action_angle: minimum turn angle (in degrees) that the bot can make between two positions
-    def find_path(self, initial_pos, target_pos, orientation, step_size, cspace_map, heuristic_func, action_angle=30):
+    def find_path(self, initial_pos, target_pos, orientation, step_size, c_space, cspace_map, heuristic_func, action_angle=30):
         initial_pos = (initial_pos[0], initial_pos[1])
         target_pos = (target_pos[0], target_pos[1])
         
-        if (not self.is_position_valid(initial_pos, cspace_map)) or (not self.is_position_valid(target_pos, cspace_map)):
-            print("Either initial or target position lies in the obstacle space or out of the configuration space. Please check and try again.")
-            return
+        # TODO: we need to add the logic to check valid init and target points
+        #if (not self.is_position_valid(initial_pos, cspace_map)) or (not self.is_position_valid(target_pos, cspace_map)):
+        #    print("Either initial or target position lies in the obstacle space or out of the configuration space. Please check and try again.")
+        #    return
 
         node_queue = SimplePriorityQueue()
         visited_nodes_set = set()
@@ -62,7 +64,7 @@ class PathExplorer:
                 is_target_found = True
                 solution_path, path_cost = current_node['path'], current_node['cost'] 
             else:
-                next_positions = self.get_next_positions(current_node, cspace_map, target_pos, step_size, action_angle, heuristic_func)
+                next_positions = self.get_next_positions(current_node, c_space, cspace_map, target_pos, step_size, action_angle, heuristic_func)
                 for node in next_positions:
                     rounded_child = self.get_rounded_pos_orient(node)
                     if rounded_child not in visited_nodes_set:
@@ -97,7 +99,7 @@ class PathExplorer:
     def roundoff_value(self, value, roundoff_threshold):
         return (round(value/roundoff_threshold))*roundoff_threshold
 
-    def get_next_positions(self, node, cspace_map, target_pos, step_size, action_angle, heuristic_func):
+    def get_next_positions(self, node, c_space, cspace_map, target_pos, step_size, action_angle, heuristic_func):
         
         action_angle_map = {
             'TWOTHETA_U': 2*action_angle,
@@ -114,7 +116,7 @@ class PathExplorer:
             #print(action) # TODO: to be removed
             next_orient = self.get_new_orientation(node['orientation'], action_angle_map[action])
             next_pos = self.get_new_position(node_pos, next_orient, step_size)
-            if self.is_position_valid(next_pos, cspace_map):
+            if self.is_position_valid(node_pos, next_pos, c_space, cspace_map):
                 node_path = node['path'].copy()
                 node_path.append(action)
                 
@@ -142,12 +144,14 @@ class PathExplorer:
         return np.add(node_pos, action)
                 
         
-    def is_position_valid(self, position, cspace_map):
+    def is_position_valid(self, parent_pos, position, c_space, cspace_map):
         #BLUE = (255, 0, 0)
         point_not_in_obstacle_area = False
         if (0 <= position[0] <= cspace_map.shape[0] and 0 <= position[1] <= cspace_map.shape[1]):
+            point_not_in_obstacle_area = not c_space.check_for_obstacles(parent_pos, position)
+            print(point_not_in_obstacle_area)
             #point_not_in_obstacle_area = not (tuple(cspace_map[position[0], position[1]]) == BLUE)
-            point_not_in_obstacle_area = True
+            #point_not_in_obstacle_area = True
         
         return point_not_in_obstacle_area
 
@@ -172,6 +176,9 @@ class PathExplorer:
 
         a_circle = plt.Circle((target_pos[1], target_pos[0]), 1.5)
         ax.add_artist(a_circle)
+
+        cmap = WorkspaceMap(0, 0)
+        cmap.plotMap(fig, ax)
         
         dots = {0: '    ', 1: '.   ', 2: '..  ', 3: '... ', 4: '....'} 
         num_dots = len(dots)
@@ -213,5 +220,3 @@ class PathExplorer:
     def init_msg_queue(self, msg_queue):
         with open('msgs.txt', 'r') as msg_file:
             msg_queue.queue = deque(msg_file.readlines())
-
-
