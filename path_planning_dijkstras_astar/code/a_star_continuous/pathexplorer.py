@@ -106,8 +106,10 @@ class PathExplorer:
             'THETA_D': -action_angle,
             'TWOTHETA_D': -2*action_angle
             }
-        turn_cost = 5 # random cost taken for a turn
-        action_angle_map = {
+
+            
+        turn_cost = 0 # random cost taken for a turn
+        action_cost_map = {
             'TWOTHETA_U': 2*turn_cost,
             'THETA_U': turn_cost,
             'THETA_Z': 0,
@@ -115,6 +117,7 @@ class PathExplorer:
             'TWOTHETA_D': 2*turn_cost
             }
               
+        
         next_postions = []
         
         node_pos = list(node['pos'])
@@ -130,7 +133,7 @@ class PathExplorer:
                     'orientation': next_orient,
                     'path': node_path,
                     'parent': node['pos'],
-                    'cost': node['cost'] + action_angle_map[action] + step_size,
+                    'cost': node['cost'] + action_cost_map[action] + step_size,
                     'cost_to_go': heuristic_func(next_pos, target_pos)
                 })
         return next_postions
