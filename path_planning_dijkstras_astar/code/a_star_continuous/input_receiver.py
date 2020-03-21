@@ -7,9 +7,9 @@ def receive_inputs(is_robot_rigid):
         print(">> Enter the initial and target positions, initial orientation and step-size of the robot")
     print(">> Example: if point is (x=2, y=5), then your input should be '2 5'")
     
-    init_pos_str = input("Initial position: ")
-    target_pos_str = input("Target position: ")
+    init_pos_str = input("Initial position (x y): ")
     orientation_str = input("Initial Orientation (in degrees): ")
+    target_pos_str = input("Target position (x y): ")
     step_size_str = input("Step size: ")
     
     radius_str = '0'
