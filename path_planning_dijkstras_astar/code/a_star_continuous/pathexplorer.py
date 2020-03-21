@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from simplepriorityqueue import SimplePriorityQueue
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from ClassMap import WorkspaceMap
+from cspaceplotter import CSpacePlotter
 
 
 class PathExplorer:
@@ -18,9 +18,9 @@ class PathExplorer:
         target_pos = (target_pos[0], target_pos[1])
         
         # TODO: we need to add the logic to check valid init and target points
-        #if (not self.is_position_valid(initial_pos, cspace_map)) or (not self.is_position_valid(target_pos, cspace_map)):
-        #    print("Either initial or target position lies in the obstacle space or out of the configuration space. Please check and try again.")
-        #    return
+        if (not self.is_position_valid(initial_pos, c_space)) or (not self.is_position_valid(target_pos, c_space)):
+            print("Either initial or target position lies in the obstacle space or out of the configuration space. Please check and try again.")
+            return
 
         node_queue = SimplePriorityQueue()
         visited_nodes_set = set()
@@ -49,7 +49,6 @@ class PathExplorer:
         start = time.clock()
         while (not node_queue.isempty()) and not is_target_found:
             count +=  1
-            #print('count: ', count)
             if (not msg_queue.empty()) and (count % 5000 == 0):
                 print(msg_queue.get())
             
@@ -64,7 +63,7 @@ class PathExplorer:
                 is_target_found = True
                 solution_path, path_cost = current_node['path'], current_node['cost'] 
             else:
-                next_positions = self.get_next_positions(current_node, c_space, cspace_map, target_pos, step_size, action_angle, heuristic_func)
+                next_positions = self.get_next_positions(current_node, c_space, target_pos, step_size, action_angle, heuristic_func)
                 for node in next_positions:
                     rounded_child = self.get_rounded_pos_orient(node)
                     if rounded_child not in visited_nodes_set:
@@ -79,7 +78,7 @@ class PathExplorer:
         print('Time taken:', end-start, 'seconds(approx:', int((end-start)/60),'min:', int((end-start)%60), 'sec)' )
         if is_target_found:
             print('Cost of the path: ', path_cost, 'units')
-            self.start_visualization(initial_node, target_pos, visited_nodes_list, solution_path, action_angle, step_size, cspace_map)
+            self.start_visualization(initial_node, target_pos, visited_nodes_list, solution_path, action_angle, step_size, c_space)
         else:
             print('Target cannot be reached')
 
@@ -99,8 +98,7 @@ class PathExplorer:
     def roundoff_value(self, value, roundoff_threshold):
         return (round(value/roundoff_threshold))*roundoff_threshold
 
-    def get_next_positions(self, node, c_space, cspace_map, target_pos, step_size, action_angle, heuristic_func):
-        
+    def get_next_positions(self, node, c_space, target_pos, step_size, action_angle, heuristic_func):
         action_angle_map = {
             'TWOTHETA_U': 2*action_angle,
             'THETA_U': action_angle,
@@ -113,10 +111,9 @@ class PathExplorer:
         
         node_pos = list(node['pos'])
         for action in action_angle_map:
-            #print(action) # TODO: to be removed
             next_orient = self.get_new_orientation(node['orientation'], action_angle_map[action])
             next_pos = self.get_new_position(node_pos, next_orient, step_size)
-            if self.is_position_valid(node_pos, next_pos, c_space, cspace_map):
+            if self.is_action_valid(node_pos, next_pos, c_space):
                 node_path = node['path'].copy()
                 node_path.append(action)
                 
@@ -144,19 +141,23 @@ class PathExplorer:
         return np.add(node_pos, action)
                 
         
-    def is_position_valid(self, parent_pos, position, c_space, cspace_map):
-        #BLUE = (255, 0, 0)
+    def is_action_valid(self, parent_pos, position, c_space):
+        is_valid_action = False
+        parent_xy = parent_pos[1], parent_pos[0]
+        child_xy = position[1], position[0] 
+
+        if (0 <= position[0] <= c_space.height and 0 <= position[1] <= c_space.width):
+            is_valid_action = not c_space.is_obstacle_in_path(parent_xy, child_xy)
+        return is_valid_action
+
+    def is_position_valid(self, position, c_space):
         point_not_in_obstacle_area = False
-        if (0 <= position[0] <= cspace_map.shape[0] and 0 <= position[1] <= cspace_map.shape[1]):
-            point_not_in_obstacle_area = not c_space.check_for_obstacles(parent_pos, position)
-            print(point_not_in_obstacle_area)
-            #point_not_in_obstacle_area = not (tuple(cspace_map[position[0], position[1]]) == BLUE)
-            #point_not_in_obstacle_area = True
-        
+        if (0 <= position[0] <= c_space.height and 0 <= position[1] <= c_space.width):
+            point_not_in_obstacle_area = not c_space.is_point_in_obstacle(position[1], position[0])
         return point_not_in_obstacle_area
 
-    
-    def start_visualization(self, initial_node, target_pos, visited_nodes, path, action_angle, step_size, cspace_map):
+
+    def start_visualization(self, initial_node, target_pos, visited_nodes, path, action_angle, step_size, c_space):
 
         action_angle_map = {
             'TWOTHETA_U': 2*action_angle,
@@ -168,20 +169,22 @@ class PathExplorer:
 
 
         fig, ax = plt.subplots()
-        plt.xlim(0,cspace_map.shape[1])
-        plt.ylim(0,cspace_map.shape[0])
+        plt.xlim(0, c_space.width)
+        plt.ylim(0, c_space.height)
         plt.grid()
-
         ax.set_aspect('equal')
 
+        # small circle of 1.5 unit radius to mark the goal region
         a_circle = plt.Circle((target_pos[1], target_pos[0]), 1.5)
         ax.add_artist(a_circle)
 
-        cmap = WorkspaceMap(0, 0)
-        cmap.plotMap(fig, ax)
+        cmap_plotter = CSpacePlotter(c_space)
+        cmap_plotter.plotMap(fig, ax)
         
         dots = {0: '    ', 1: '.   ', 2: '..  ', 3: '... ', 4: '....'} 
         num_dots = len(dots)
+        
+
         print('Visualization in process...\n')
         def animate(i):
             if i < len(visited_nodes):
@@ -205,14 +208,13 @@ class PathExplorer:
                     prev_pos = next_pos
                     prev_orient = next_orient
                 
-        
-        anim = FuncAnimation(fig, animate, frames=len(visited_nodes)+1, interval=10, blit=False, repeat=False)
+        anim = FuncAnimation(fig, animate, frames=len(visited_nodes)+1, interval=0.01, blit=False, repeat=False)
 
         fig.show()
         plt.draw()
         plt.show()
 
-        anim.save('a_star_exploration.gif', writer='imagemagick', fps=30)
+        anim.save('./media/a_star_exploration.gif', writer='imagepick', fps=60)
 
         print('\nVisualization Complete.')
 

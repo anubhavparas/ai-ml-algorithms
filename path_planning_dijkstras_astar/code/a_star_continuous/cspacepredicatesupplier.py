@@ -26,12 +26,12 @@ class CSpacePredicateSupplier:
     '''
     def get_polygon_predicate(self, height, padding):
         X, Y = 0, 1
-        coord_poly = np.array([(25-padding, height-(185+padding)),
-                                (75+padding, height-(185+padding)),
-                                (100+padding, height-(150+padding)),
-                                (75+padding, height-(120-padding)),
-                                (50+padding, height-(150-padding)),
-                                (20-padding, height-(120-padding))], dtype=np.int32)
+        coord_poly = np.array([(25-padding, (185+padding)),
+                                (75+padding, (185+padding)),
+                                (100+padding, (150+padding)),
+                                (75+padding, (120-padding)),
+                                (50+padding, (150-padding)),
+                                (20-padding, (120-padding))], dtype=np.int32)
 
         pred_poly_line_1 = lambda x, y: (y - coord_poly[0][Y] - (coord_poly[0][Y]-coord_poly[1][Y])/(coord_poly[0][X]-coord_poly[1][X])*(x - coord_poly[0][X])) >= 0
         pred_poly_line_2 = lambda x, y: (y - coord_poly[1][Y] - (coord_poly[1][Y]-coord_poly[2][Y])/(coord_poly[1][X]-coord_poly[2][X])*(x - coord_poly[1][X])) >= 0
@@ -47,10 +47,10 @@ class CSpacePredicateSupplier:
 
     def get_rect_predicate(self, height, padding):
         X, Y = 0, 1
-        coord_rect = np.array([(30-padding, height-(67.5+padding)),
-                                (35+padding, height-(76+padding)),
-                                (100+padding, height-(38.6-padding)),
-                                (95-padding, height-(30-padding))], dtype = np.int32)
+        coord_rect = np.array([(30-padding, (67.5+padding)),
+                                (35+padding, (76+padding)),
+                                (100+padding, (38.6-padding)),
+                                (95-padding, (30-padding))], dtype = np.int32)
 
         pred_rect_line_1 = lambda x, y: (y - coord_rect[0][Y] - (coord_rect[0][Y]-coord_rect[1][Y])/(coord_rect[0][X]-coord_rect[1][X])*(x - coord_rect[0][X])) >= 0
         pred_rect_line_2 = lambda x, y: (y - coord_rect[1][Y] - (coord_rect[1][Y]-coord_rect[2][Y])/(coord_rect[1][X]-coord_rect[2][X])*(x - coord_rect[1][X])) >= 0
@@ -63,10 +63,10 @@ class CSpacePredicateSupplier:
     
     def get_rhombus_predicate(self, height, padding):
         X, Y = 0, 1
-        coord_rhom = np.array([(225, height-(40+padding)),
-                                (250+padding, height-25),
-                                (225, height-(10-padding)),
-                                (200-padding, height-25)], dtype=np.int32)
+        coord_rhom = np.array([(225, (40+padding)),
+                                (250+padding, 25),
+                                (225, (10-padding)),
+                                (200-padding, 25)], dtype=np.int32)
 
         pred_rhom_line_1 = lambda x, y: (y - coord_rhom[0][Y] - (coord_rhom[0][Y]-coord_rhom[1][Y])/(coord_rhom[0][X]-coord_rhom[1][X])*(x - coord_rhom[0][X])) >= 0
         pred_rhom_line_2 = lambda x, y: (y - coord_rhom[1][Y] - (coord_rhom[1][Y]-coord_rhom[2][Y])/(coord_rhom[1][X]-coord_rhom[2][X])*(x - coord_rhom[1][X])) <= 0
@@ -78,11 +78,11 @@ class CSpacePredicateSupplier:
 
 
     def get_circle_predicate(self, height, padding):
-        predicate_circle = lambda x,y: ((x-225)**2 + (y - (height-150))**2 - (25+padding)**2) <=0
+        predicate_circle = lambda x,y: ((x-225)**2 + (y - (150))**2 - (25+padding)**2) <=0
         return predicate_circle
 
     def get_ellipse_predicate(self, height, padding):
-        predicate_ellipse = lambda x,y: (((x - 150)**2)/((40+padding)**2) + ((y - (height-100))**2)/((20+padding)**2) - 1) <= 0
+        predicate_ellipse = lambda x,y: (((x - 150)**2)/((40+padding)**2) + ((y - (100))**2)/((20+padding)**2) - 1) <= 0
         return predicate_ellipse
 
     

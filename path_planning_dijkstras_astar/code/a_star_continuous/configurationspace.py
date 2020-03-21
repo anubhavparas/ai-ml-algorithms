@@ -11,9 +11,6 @@ class ConfigurationSpace:
         self.padding = radius_of_bot + clearance
         padding = self.padding
 
-
-
-
         self.coord_poly = np.array([(25-padding, 185+padding),
                                (75+padding, 185+padding),
                                (100+padding, 150+padding),
@@ -55,16 +52,26 @@ class ConfigurationSpace:
         return img
 
 
-    def check_for_obstacles(self, p1, p2):
+    def is_obstacle_in_path(self, p1, p2):
         predicate_or_op = lambda predicate1, predicate2: predicate1 or predicate2
         is_action_invalid = reduce(predicate_or_op, [
-            check_for_boundary_padding(p2[1], p2[0], self.width, self.height, self.padding),
-            checkCircleIntersection(p1, p2, self.circle[0], self.circle[1]),
-            checkEllipseIntersection(p1, p2, self.ellipse[0], self.ellipse[1]),
-            checkPolyIntersection(p1, p2, self.coord_poly),
-            checkPolyIntersection(p1, p2, self.coord_rect),
-            checkPolyIntersection(p1, p2, self.coord_rhom)
+            is_intersecting_with_boundary(p2[1], p2[0], self.width, self.height, self.padding),
+            is_intersecting_with_circle(p1, p2, self.circle[0], self.circle[1]),
+            is_intersecting_with_ellipse(p1, p2, self.ellipse[0], self.ellipse[1]),
+            is_intersecting_with_polygon(p1, p2, self.coord_poly),
+            is_intersecting_with_polygon(p1, p2, self.coord_rect),
+            is_intersecting_with_polygon(p1, p2, self.coord_rhom)
             ])
         return is_action_invalid
+
+    def is_point_in_obstacle(self, x, y):
+        padding = self.padding
+        height = self.height
+        width = self.width
+        obstacle_predicates = CSpacePredicateSupplier().get_cspace_predicates(height, width, padding)
+        predicate_or_op = lambda predicate1, predicate2: predicate1 or predicate2
+        is_point_in_obstacle = reduce(predicate_or_op, [obstacle_predicate(x,y) for obstacle_predicate in obstacle_predicates])
+        return is_point_in_obstacle
+
 
 
