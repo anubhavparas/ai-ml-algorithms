@@ -106,17 +106,6 @@ class PathExplorer:
             'THETA_D': -action_angle,
             'TWOTHETA_D': -2*action_angle
             }
-
-            
-        turn_cost = 0 # random cost taken for a turn
-        action_cost_map = {
-            'TWOTHETA_U': 2*turn_cost,
-            'THETA_U': turn_cost,
-            'THETA_Z': 0,
-            'THETA_D': turn_cost,
-            'TWOTHETA_D': 2*turn_cost
-            }
-              
         
         next_postions = []
         
@@ -133,7 +122,7 @@ class PathExplorer:
                     'orientation': next_orient,
                     'path': node_path,
                     'parent': node['pos'],
-                    'cost': node['cost'] + action_cost_map[action] + step_size,
+                    'cost': node['cost'] + step_size,
                     'cost_to_go': heuristic_func(next_pos, target_pos)
                 })
         return next_postions
@@ -169,11 +158,8 @@ class PathExplorer:
 
 
     def start_visualization(self, initial_node, target_pos, visited_nodes, path, action_angle, step_size, c_space):
-
-        #fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        out = cv2.VideoWriter("./media/astar_exploration.mp4", fourcc, 20.0, (c_space.width, c_space.height))
-
+        fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+        
         action_angle_map = {
             'TWOTHETA_U': 2*action_angle,
             'THETA_U': action_angle,
@@ -199,17 +185,19 @@ class PathExplorer:
         dots = {0: '    ', 1: '.   ', 2: '..  ', 3: '... ', 4: '....'} 
         num_dots = len(dots)
         
-
         print('Visualization in process...\n')
+        out = cv2.VideoWriter("./media/astar.mp4", fourcc, 20.0, (728, 505))
+        
         def animate(i):
             if i < len(visited_nodes):
                 ax.set_title('Exploring Configuration Space' + str(dots[i%num_dots]), fontsize=13)
                 parent_y, parent_x = visited_nodes[i]['parent']
                 node_y, node_x = visited_nodes[i]['pos']
                 ax.quiver(parent_x, parent_y, node_x-parent_x, node_y-parent_y, units='xy' ,scale=1, color='orange')
-                #plt.savefig('./media/frame'+str(i)+'.png', bbox_inches='tight')
-                #frame = cv2.imread('./media/frame'+str(i)+'.png')
-                #out.write(frame)
+                if (i % 2500 == 0):
+                    plt.savefig('./media/frame'+str(i)+'.png', bbox_inches='tight')
+                    frame = cv2.imread('./media/frame'+str(i)+'.png')
+                    out.write(frame)
             else:
                 goal_reached_str = 'Goal Reached. Cost: ' + str(len(path)*step_size) + 'units' 
                 ax.set_title(goal_reached_str, fontsize=13)
@@ -224,12 +212,13 @@ class PathExplorer:
                     ax.quiver(parent_x, parent_y, node_x-parent_x, node_y-parent_y, units='xy' ,scale=1, color='b')
                     prev_pos = next_pos
                     prev_orient = next_orient
-                #plt.savefig('./media/frame'+str(i)+'.png', bbox_inches='tight')
-                #frame = cv2.imread('./media/frame'+str(i)+'.png')
-                #out.write(frame)
+                plt.savefig('./media/frame'+str(i)+'.png', bbox_inches='tight')
+                frame = cv2.imread('./media/frame'+str(i)+'.png')
+                out.write(frame)
                 
-        anim = FuncAnimation(fig, animate, frames=len(visited_nodes)+1, interval=0.01, blit=False, repeat=True)
-
+        anim = FuncAnimation(fig, animate, frames=len(visited_nodes)+1, interval=0.01, blit=False, repeat=False)
+        
+        out.release()
         fig.show()
         plt.draw()
         plt.show()

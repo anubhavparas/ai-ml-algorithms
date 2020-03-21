@@ -32,7 +32,11 @@ The goal threshold radius is set to 1.5
   - Robot Radius: 1
   - Clearance Required: 1
 
-  **Output:**
-  - Time take: 616.05278529999996 sec
-  - Cost of the path: 377.487373415293 units
+**Output:**
+  - Using Manhattan heuristic:
+    - Time take: 371.4388 sec (approx 6min 11sec)
+    - Cost of the path: 191.0 units
+  - Using Euclidean heuristic:
+    - Time take: 1298.1109 sec (approx 21min 38sec)
+    - Cost of the path: 189.0 units
 
