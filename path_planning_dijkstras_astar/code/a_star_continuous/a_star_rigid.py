@@ -18,7 +18,7 @@ if __name__ == "__main__":
         c_space_map = c_space.get_cspace_map()
 
         path_explorer = PathExplorer()
-        path_explorer.find_path(init_pos, target_pos, orientation, step_size, c_space, c_space_map, EUCL_HEURISTIC)
+        path_explorer.find_path(init_pos, target_pos, orientation, step_size, c_space, c_space_map, MANHTN_HEURISTIC)
 
         
 
