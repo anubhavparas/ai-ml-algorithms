@@ -36,11 +36,15 @@ def is_intersecting_with_circle(p1,p2,r,center):
         if flag == 0:
             root1 = (-B+math.sqrt(disc))/(2*A)
             root2 = (-B-math.sqrt(disc))/(2*A)
+	    rooty1 = m*x1 + y_int
+            rooty2 = m*x2+y_int
         elif flag == 1:
             root1 = x_int
             root2 = root1
+	    rooty1 = (-B+math.sqrt(disc))/(2*A)
+            rooty2 = (-B-math.sqrt(disc))/(2*A)
 
-    if min(p1[0],p2[0]) <= root1 <= max(p1[0],p2[0]) or min(p1[0],p2[0]) <= root2 <= max(p1[0],p2[0]):
+    if (min(p1[0],p2[0])<=root1<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=rooty1<=max(p1[1],p2[1])) or (min(p1[0],p2[0])<=root2<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=rooty2<=max(p1[1],p2[1])):
         return True
     else:
         return False
@@ -76,11 +80,15 @@ def is_intersecting_with_ellipse(p1,p2,ell_param,center):
         if flag == 0:
             root1 = (-B+math.sqrt(disc))/(2*A)
             root2 = (-B-math.sqrt(disc))/(2*A)
+	    rooty1 = m*x1 + y_int
+            rooty2 = m*x2+y_int
         elif flag == 1:
             root1 = x_int
             root2 = root1
+	    rooty1 = (-B+math.sqrt(disc))/(2*A)
+            rooty2 = (-B-math.sqrt(disc))/(2*A)
 
-    if min(p1[0],p2[0]) <= root1 <= max(p1[0],p2[0]) or min(p1[0],p2[0]) <= root2 <= max(p1[0],p2[0]):
+    if (min(p1[0],p2[0])<=root1<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=rooty1<=max(p1[1],p2[1]))or (min(p1[0],p2[0])<=root2<=max(p1[0],p2[0]) and min(p1[1],p2[1])<=rooty2<=max(p1[1],p2[1])):
         return True
     else:
         return False
