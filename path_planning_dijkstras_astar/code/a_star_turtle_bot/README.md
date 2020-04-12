@@ -39,33 +39,55 @@ The goal threshold radius is set to 0.2m
 -- Few sample inputs are:
 
 Sample 1:
+
 Initial position (x y): -4 -3
+
 Initial Orientation (in degrees): 30
+
 Target position (x y): 0 -3
+
 Speed of the wheels in RPM (RPM1 RPM2): 70 80
+
 Clearance required (in meters, recommended: 0 to 0.35m): 0.3
+
 Time taken: 2.2881642000000006 seconds(approx: 0 min: 2 sec)
+
 Cost of the path:  6.997897635871265 units
 
 
 
 Sample 2:
+
 Initial position (x y): -4 -4
+
 Initial Orientation (in degrees): 60
+
 Target position (x y): 4 2
+
 Speed of the wheels in RPM (RPM1 RPM2): 70 80
+
 Clearance required (in meters, recommended: 0 to 0.35m): 0.3
+
 Time taken: 4.9481258 seconds(approx: 0 min: 4 sec)
+
 Cost of the path:  15.550883635269475 units
 
 
+
 Sample 3:
+
 Initial position (x y): -4.5 -4.5
+
 Initial Orientation (in degrees): 120
+
 Target position (x y): 2 0
+
 Speed of the wheels in RPM (RPM1 RPM2): 140 10
+
 Clearance required (in meters, recommended: 0 to 0.35m): 0
+
 Time taken: 3.0584932999999985 seconds(approx: 0 min: 3 sec)
+
 Cost of the path:  7.809475738048622 units
 
 
