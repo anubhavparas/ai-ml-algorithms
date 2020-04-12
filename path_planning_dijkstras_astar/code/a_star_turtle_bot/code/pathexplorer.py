@@ -11,6 +11,7 @@ from cspaceplotter import CSpacePlotter
 from constants import *
 from curveplotter import plot_curve
 import json
+from videowriter import write_video
 
 
 class PathExplorer:
@@ -195,6 +196,7 @@ class PathExplorer:
         print('Visualization in process...\n')
         out = cv2.VideoWriter("./media/astar_nonholonomic.mp4", fourcc, 1.0, (509, 524))
         print(len(visited_nodes))
+        sample_num = 100
         def animate(i):
             if i < len(visited_nodes):
                 
@@ -207,7 +209,7 @@ class PathExplorer:
                     orientation = parent_pos[1]
                     plot_curve(ax, (parent_x, parent_y), orientation, velocity, t_bot, 'orange')
                     #print(i, len(visited_nodes))
-                    if (i % 500 == 0):
+                    if (i % sample_num == 0):
                         plt.savefig('./media/frame'+str(i)+'.png', bbox_inches='tight')
                         #frame = cv2.imread('./media/frame'+str(i)+'.png')
                         #print(frame.shape)
@@ -242,7 +244,7 @@ class PathExplorer:
                 #print(visited_nodes[i])
                 print(i, len(visited_nodes))
                 
-                if (i % 100 == 0):
+                if (i % sample_num == 0):
                     plt.savefig('./media/frame'+str(i)+'.png', bbox_inches='tight')
                     #frame = cv2.imread('./media/frame'+str(i)+'.png')
                     #print(frame.shape)
@@ -267,6 +269,7 @@ class PathExplorer:
 
         #anim.save('./media/a_star_exploration.gif', writer='imagepick', fps=60)
         #out.release()
+        write_video((len(visited_nodes)), sample_num)
 
         print('\nVisualization Complete.')
     
