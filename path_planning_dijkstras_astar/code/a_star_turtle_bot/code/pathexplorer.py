@@ -279,7 +279,7 @@ class PathExplorer:
         params_data['delta_time'] = delta_t
         params_data['init_pose'] = init_pose
 
-        file_name = 'action_velocity.json'
+        file_name = 'params/action_velocity.json'
         with open(file_name, 'w') as outfile:
             json.dump(params_data, outfile)
         return params_data
