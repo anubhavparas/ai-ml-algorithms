@@ -82,8 +82,9 @@ class PathExplorer:
         print('Time taken:', end-start, 'seconds(approx:', int((end-start)/60),'min:', int((end-start)%60), 'sec)' )
         if is_target_found:
             print('Cost of the path: ', path_cost, 'units')
-            self.write_param_json(solution_path, (initial_pos[1], initial_pos[0], orientation))
+            path_params = self.write_param_json(solution_path, (initial_pos[1], initial_pos[0], orientation))
             self.start_visualization(initial_node, target_pos, visited_nodes_list, solution_path, path_cost, c_space, t_bot)
+            return path_params
         else:
             print('Target cannot be reached')
 
@@ -278,6 +279,7 @@ class PathExplorer:
         file_name = 'action_velocity.json'
         with open(file_name, 'w') as outfile:
             json.dump(params_data, outfile)
+        return params_data
 
     
     def init_msg_queue(self, msg_queue):

@@ -21,7 +21,8 @@ def run_a_star_algo():
         c_space = ConfigurationSpace(x_limit=(-5, 5), y_limit=(-5,5), radius_of_bot=t_bot.radius, clearance=clearance_req)
 
         path_explorer = PathExplorer()
-        path_explorer.find_path(init_pos, target_pos, orientation, wheel_vels, t_bot, c_space, EUCL_HEURISTIC)
+        path_params = path_explorer.find_path(init_pos, target_pos, orientation, wheel_vels, t_bot, c_space, EUCL_HEURISTIC)
+        return path_params
 
 
 
