@@ -38,7 +38,7 @@ The goal threshold radius is set to 0.2m
 
 -- Few sample inputs are:
 
-####Sample 1:
+###Sample 1:
 
 Initial position (x y): -4 -3
 
@@ -56,7 +56,7 @@ Cost of the path:  6.997897635871265 units
 
 
 
-####Sample 2:
+###Sample 2:
 
 Initial position (x y): -4 -4
 
@@ -74,7 +74,7 @@ Cost of the path:  15.550883635269475 units
 
 
 
-####Sample 3:
+###Sample 3:
 
 Initial position (x y): -4.5 -4.5
 
